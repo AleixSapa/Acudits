@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador d'Acudits 😄</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="container">
+    <h1>Generador d'Acudits 😄</h1>
+    <p class="subtitle">Genera acudits amb la IA i desa'ls a la teva col·lecció.</p>
+
+    <section class="card">
+      <label for="tema">Tema (opcional)</label>
+      <input id="tema" type="text" placeholder="p. ex. animals, futbol, informàtica…" />
+      <p class="ajuda">Deixa-ho buit i clica el botó per generar-ne un a l'atzar.</p>
+      <button id="btn-generar">Genera un acudit</button>
+    </section>
+
+    <section class="card">
+      <div class="capçalera-llista">
+        <h2>Acudits desats (<span id="comptador">0</span>)</h2>
+        <button id="btn-refresca" class="secundari">Actualitza</button>
+      </div>
+      <ul id="llista" class="llista"></ul>
+      <p id="llista-buida" class="buida">Encara no hi ha cap acudit. Genera'n un!</p>
+    </section>
+  </main>
+
+  <!-- Finestra (modal) on es mostra l'acudit generat -->
+  <div id="modal" class="modal-fons oculta">
+    <div class="modal-caixa" role="dialog" aria-modal="true">
+      <button id="modal-tanca" class="modal-tanca" aria-label="Tanca">✕</button>
+      <div id="modal-contingut"></div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
