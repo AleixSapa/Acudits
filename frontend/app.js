@@ -8,23 +8,21 @@ const btnRefresca = $("#btn-refresca");
 const llista = $("#llista");
 const comptador = $("#comptador");
 const llistaBuida = $("#llista-buida");
+const toggleLlista = $("#toggle-llista");
+const cosLlista = $("#cos-llista");
+const fletxa = $("#fletxa");
 const modal = $("#modal");
 const modalContingut = $("#modal-contingut");
 const modalTanca = $("#modal-tanca");
+
+// Acudits carregats (id → text) per poder mostrar-los al modal en clicar-los
+const acuditsCache = new Map();
 
 // Escapa text per evitar injecció d'HTML
 function esc(s) {
   const d = document.createElement("div");
   d.textContent = s;
   return d.innerHTML;
-}
-
-function formatData(iso) {
-  try {
-    return new Date(iso).toLocaleString("ca-ES");
-  } catch (_) {
-    return iso;
-  }
 }
 
 // ─── Finestra (modal) ───────────────────────────────────────
@@ -79,13 +77,14 @@ async function carregaLlista() {
     const acudits = data.acudits || [];
     comptador.textContent = acudits.length;
     llista.innerHTML = "";
+    acuditsCache.clear();
     llistaBuida.style.display = acudits.length ? "none" : "block";
 
     for (const a of acudits) {
+      acuditsCache.set(String(a.id), a.text);
       const li = document.createElement("li");
       li.innerHTML =
-        `<div><div>${esc(a.text)}</div>` +
-        `<div class="data">${formatData(a.created_at)}</div></div>` +
+        `<button class="acudit-mini" data-id="${a.id}" title="Mostra l'acudit">${esc(a.text)}</button>` +
         `<button class="esborra" title="Esborra" data-id="${a.id}">🗑️</button>`;
       llista.appendChild(li);
     }
@@ -94,13 +93,25 @@ async function carregaLlista() {
   }
 }
 
-// ─── Esborrar (delegació d'esdeveniments) ───────────────────
+// ─── Clics dins la llista (mostrar o esborrar) ──────────────
 llista.addEventListener("click", async (ev) => {
+  const mini = ev.target.closest(".acudit-mini");
+  if (mini) {
+    const text = acuditsCache.get(mini.dataset.id);
+    if (text) obreModal(`<div>${esc(text)}</div>`);
+    return;
+  }
   const btn = ev.target.closest(".esborra");
   if (!btn) return;
   if (!confirm("Segur que vols esborrar aquest acudit?")) return;
   await fetch(`/api/acudits/${btn.dataset.id}`, { method: "DELETE" });
   await carregaLlista();
+});
+
+// ─── Desplegar / plegar la llista d'acudits desats ──────────
+toggleLlista.addEventListener("click", () => {
+  const obert = cosLlista.classList.toggle("oculta") === false;
+  toggleLlista.setAttribute("aria-expanded", String(obert));
 });
 
 btnGenerar.addEventListener("click", generar);

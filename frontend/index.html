@@ -19,12 +19,17 @@
     </section>
 
     <section class="card">
-      <div class="capçalera-llista">
+      <button id="toggle-llista" class="capçalera-llista" aria-expanded="false">
         <h2>Acudits desats (<span id="comptador">0</span>)</h2>
-        <button id="btn-refresca" class="secundari">Actualitza</button>
+        <span class="fletxa" id="fletxa">▸</span>
+      </button>
+      <div id="cos-llista" class="oculta">
+        <div class="barra-llista">
+          <button id="btn-refresca" class="secundari">Actualitza</button>
+        </div>
+        <ul id="llista" class="llista"></ul>
+        <p id="llista-buida" class="buida">Encara no hi ha cap acudit. Genera'n un!</p>
       </div>
-      <ul id="llista" class="llista"></ul>
-      <p id="llista-buida" class="buida">Encara no hi ha cap acudit. Genera'n un!</p>
     </section>
   </main>
 
